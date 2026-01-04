@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hai Kamu 💛</title>
+<style>
+body{
+  margin:0;height:100vh;display:flex;justify-content:center;align-items:center;
+  background:linear-gradient(135deg,#ffcc70,#ff9f43);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color:#fff;
+  overflow: hidden;
+}
+.box{
+  background:rgba(0,0,0,.35);padding:30px;border-radius:20px;
+  text-align:center;width:320px;box-shadow:0 12px 25px rgba(0,0,0,.4);
+  position: relative;
+}
+.sticker{width:130px;cursor:pointer;animation:idle 3s infinite}
+@keyframes idle{50%{transform:translateY(-4px)}}
+
+/* Animasi Dino */
+.jump{animation:jump .6s}
+@keyframes jump{30%{transform:translateY(-20px) scale(1.05)}}
+.nod{animation:nod .4s}
+@keyframes nod{25%{transform:rotate(6deg)}75%{transform:rotate(-6deg)}}
+
+textarea{
+  width:100%;min-height:80px;border-radius:12px;border:0;
+  padding:12px;font-size:14px;outline:none;
+  font-family: inherit; box-sizing: border-box;
+  resize: none; margin-top: 10px;
+}
+
+/* Style untuk Tombol */
+.btn {
+  margin-top: 15px;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 50px;
+  background: #fff;
+  color: hwb(43 18% 0%);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: inline-block;
+}
+.btn:hover { transform: scale(1.05); }
+.btn:active { transform: scale(0.95); }
+
+/* Style khusus tombol pilihan (Slide 2) */
+.choice-container { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+.btn-choice { width: 100%; padding: 8px; font-size: 13px; }
+
+/* Mengatur Slide */
+.slide { display: none; animation: fadeIn 0.5s; }
+.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 { margin: 10px 0; font-size: 22px; }
+p { font-size: 15px; line-height: 1.5; opacity: 0.9; }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  
+  <div id="slide1" class="slide active">
+    <img src="yellow-dragon-nailong.gif" id="dino" class="sticker" alt="Dino Lucu">
+    <p>Hai, apa kabar? 🌞</p>
+    
+    <textarea id="story" placeholder="Ceritain bagaimana harimu hari ini..."></textarea>
+    
+    <button class="btn" onclick="goToSlide2()">Lanjut 💌</button>
+  </div>
+
+  <div id="slide2" class="slide">
+    <img src="yellow-dino-dancing-yello-dino.gif" class="sticker" style="width: 110px;">
+    <h2>Terima kasih ceritanya!</h2>
+    <p>Kalau boleh tau, gimana perasaanmu sekarang?</p>
+    
+    <div class="choice-container">
+        <button class="btn btn-choice" onclick="finish('Senang')">Lagi Senang 😄</button>
+        <button class="btn btn-choice" onclick="finish('Sedih')">Agak Sedih 😢</button>
+        <button class="btn btn-choice" onclick="finish('Capek')">Capek Banget 😴</button>
+    </div>
+  </div>
+
+  <div id="slide3" class="slide">
+    <img src="gambar/yellow-dragon-nailong.gif" class="sticker jump" style="animation: jump 2s infinite">
+    <h2 id="finalTitle">Kamu Hebat! ✨</h2>
+    <p id="finalMsg">Apapun yang terjadi hari ini,<br>kamu sudah melakukan yang terbaik.</p>
+    <p>Semangat Terus Ya!</p>
+    
+    <button class="btn" onclick="location.reload()">Ulangi ↺</button>
+  </div>
+
+  <audio id="music" loop>
+    <source src="WhatsApp Audio 2026-01-04 at 08.51.18.mp3" type="audio/mpeg">
+  </audio>
+
+</div>
+
+<script>
+const d = document.getElementById("dino");
+const t = document.getElementById("story");
+const m = document.getElementById("music");
+
+// Play music on interaction
+window.addEventListener('click', () => {
+    m.play().catch(()=>{});
+}, { once: true });
+
+// Interaksi Dino
+d.onclick = () => {
+  d.classList.add("jump");
+  setTimeout(() => d.classList.remove("jump"), 600);
+};
+
+t.oninput = () => {
+  d.classList.add("nod");
+  setTimeout(() => d.classList.remove("nod"), 400);
+};
+
+// Fungsi Pindah ke Slide 2
+function goToSlide2() {
+    const textIsi = t.value.trim();
+    if(textIsi === "") {
+        alert("Isi ceritamu dulu dong sedikit hehe..");
+        return;
+    }
+    changeSlide('slide1', 'slide2');
+}
+
+// Fungsi Pindah ke Slide 3 (Finish) dengan pesan personal
+function finish(mood) {
+    const title = document.getElementById('finalTitle');
+    const msg = document.getElementById('finalMsg');
+
+    // Ubah pesan berdasarkan tombol yang dipilih
+    if(mood === 'Senang') {
+        title.innerText = "Ikut Senang! 🥳";
+        msg.innerHTML = "Semoga bahagiamu nular ke hari esok ya,<br>Tetap tersenyum!";
+    } else if (mood === 'Sedih') {
+        title.innerText = "Kamu Kuat Ko 🤗";
+        msg.innerHTML = "Walau sekarang terasa susah <br>insyallah besok bakal lebih baik";
+    } else {
+        title.innerText = "Kamu Pasti Bisa! 💪";
+        msg.innerHTML = "Setiap langkah kecil yang kamu ambil hari ini <br>sedang menulis keberhasilan.";
+    }
+
+    changeSlide('slide2', 'slide3');
+}
+
+// Helper function untuk ganti slide
+function changeSlide(hideId, showId) {
+    document.getElementById(hideId).classList.remove('active');
+    document.getElementById(showId).classList.add('active');
+}
+</script>
+
+</body>
+</html>
